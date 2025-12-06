@@ -1,0 +1,26 @@
+package com.sorverteria.Nicolas_End.SorverteriaApi.domain.fruits;
+
+import jakarta.persistence.*;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domain.acai.AcaiToDeliveryEntity;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+
+@Table(name = "TB_FRUITS")
+@Entity
+public class FruitsEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
+    @Column
+    private int quantityInStock;
+
+    @ManyToMany
+    @JoinTable(name = "TB_FRUITS_ACAI",
+            joinColumns = @JoinColumn(name = "fruits_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "acai_to_delivery_id"))
+    private Set<AcaiToDeliveryEntity> acaiToDeliveryEntities = new LinkedHashSet<>();
+
+}

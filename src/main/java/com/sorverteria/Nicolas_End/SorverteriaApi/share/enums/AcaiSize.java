@@ -1,0 +1,13 @@
+package com.sorverteria.Nicolas_End.SorverteriaApi.share.enums;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum AcaiSize {
+    BIG("500ML"),
+    MEDIUM("400ML"),
+    SMALL("300ML");
+    private final String size;
+}
