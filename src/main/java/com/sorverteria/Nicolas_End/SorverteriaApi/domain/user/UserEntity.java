@@ -5,7 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,10 @@ import java.util.List;
 
 @Entity
 @Table(name="TB_USERS")
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class UserEntity implements UserDetails {
 
     @Id
@@ -33,11 +36,18 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false,unique = false)
     private UserRole role;
 
+    public UserEntity (String email, String name, String password, UserRole role){
+        this.email = email;
+        this.name=name;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         if (this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_EMPLOYEER"), new SimpleGrantedAuthority("ROLE_COSTUMER"));
-        else if (this.role == UserRole.EMPLOYEE) return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEER"), new SimpleGrantedAuthority("ROLE_COSTUMER"));
+        else if (this.role == UserRole.EMPLOYEER) return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEER"), new SimpleGrantedAuthority("ROLE_COSTUMER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_COSTUMER"));
     }
 
