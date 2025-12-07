@@ -34,7 +34,7 @@ public class AuthentizationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity login(@RequestBody RegisterDTO data ){
-        return authorizationService.login(data);
+    public ResponseEntity register(@RequestBody RegisterDTO data ){
+        return authorizationService.register(data);
     }
 }

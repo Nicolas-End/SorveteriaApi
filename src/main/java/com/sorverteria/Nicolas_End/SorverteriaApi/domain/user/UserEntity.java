@@ -1,10 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domain.user ;
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.share.enums.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,17 +25,19 @@ public class UserEntity implements UserDetails {
     private String name;
 
     @Column(nullable = true , unique = true)
-    private int cpf;
+    private String cpf;
 
     @Column(nullable = false,unique = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false,unique = false)
     private UserRole role;
 
     public UserEntity (String email, String name, String password, UserRole role){
         this.email = email;
         this.name=name;
+        this.cpf=null;
         this.password = password;
         this.role = role;
     }
