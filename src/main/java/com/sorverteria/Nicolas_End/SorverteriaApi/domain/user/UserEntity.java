@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domain.user ;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.share.enums.UserRole;
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,6 +42,8 @@ public class UserEntity implements UserDetails {
         this.password = password;
         this.role = role;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

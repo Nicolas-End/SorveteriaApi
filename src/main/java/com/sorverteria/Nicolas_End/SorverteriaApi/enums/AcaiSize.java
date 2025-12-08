@@ -1,4 +1,4 @@
-package com.sorverteria.Nicolas_End.SorverteriaApi.share.enums;
+package com.sorverteria.Nicolas_End.SorverteriaApi.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

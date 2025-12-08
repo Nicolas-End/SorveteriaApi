@@ -1,15 +1,55 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domain.user;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.domain.user.UserRepository;
+
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.AuthenticationDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.LoginResponseDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.RegisterDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.UserSummaryDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.TokenService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
+import java.util.ArrayList;
+
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, TokenService tokenService){
         this.userRepository=userRepository;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+    }
+
+    // Registra um novo usuario de acordo com a role passada
+    public ResponseEntity register(RegisterDTO data, UserRole role){
+        if(this.userRepository.findByEmail(data.email()) != null ) return ResponseEntity.badRequest().build();
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        UserEntity newUser = new UserEntity(data.email(),data.name(),encryptedPassword, role);
+
+        this.userRepository.save(newUser);
+        return ResponseEntity.ok().build();
     }
 
 
+    // realiza o login do usuario e retorna um token valido por duas horas
+    public ResponseEntity login(AuthenticationDTO data){
+        var usenamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        var auth = this.authenticationManager.authenticate(usenamePassword);
+
+        var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+    public ArrayList<UserSummaryDTO> getEmployeers(){
+        return userRepository.findByRole(UserRole.EMPLOYEER);
+    }
 }

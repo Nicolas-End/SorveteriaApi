@@ -1,6 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domain.acai;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.share.enums.*;
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domain.user.UserEntity;
 import java.util.HashSet;
