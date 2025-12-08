@@ -1,14 +1,13 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domain.user;
 
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.dto.AuthenticationDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dto.LoginResponseDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dto.RegisterDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dto.UserSummaryDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.TokenService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
@@ -49,7 +48,20 @@ public class UserService {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    public ArrayList<UserSummaryDTO> getEmployeers(){
-        return userRepository.findByRole(UserRole.EMPLOYEER);
+    public ArrayList<UserSummaryDTO> getUsersByRole(UserRole role){
+        return userRepository.findByRole(role);// retorna os usuario cadastrado por meio do cargo
     }
+
+    @Transactional // garante que todas ações serão realizadas em caso de erro é desfeito
+    public ResponseEntity dropEmployeer(RequestEmailDTO data){
+
+        // verifica se o usuario é employeer mesmo
+        if (this.userRepository.findByEmailAndRole(data.email(), UserRole.EMPLOYEER) == null){
+            return ResponseEntity.badRequest().build();
+        }
+        this.userRepository.deleteByEmail(data.email());
+        return ResponseEntity.ok("Funcionario Apagado com sucesso");
+
+    }
+
 }

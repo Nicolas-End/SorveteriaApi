@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controller;
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domain.user.UserService;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dto.RequestEmailDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dto.UserSummaryDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dto.RegisterDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
@@ -33,7 +34,14 @@ public class AdminController {
 
     @GetMapping("/get-employeers")
     public ArrayList<UserSummaryDTO> getEmployeers(){
-        return userService.getEmployeers();
+        // retorna todos os employers cadastrados no sistemas
+        return userService.getUsersByRole(UserRole.EMPLOYEER);
+    }
+
+    @DeleteMapping("/drop-employeer")
+    public ResponseEntity deleteEmployeers(@RequestBody RequestEmailDTO data){
+
+        return userService.dropEmployeer(data);
     }
 
 }
