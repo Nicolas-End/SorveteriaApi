@@ -60,7 +60,7 @@ public class UserService {
             if (this.userRepository.findByEmailAndRole(data.email(), UserRole.EMPLOYEER) == null){
             return ResponseEntity.badRequest().build();
         }
-        this.userRepository.deleteByEmail(data.email());
+        this.userRepository.deleteById(data.email());
         return ResponseEntity.ok("Funcionario Apagado com sucesso");
 
     }

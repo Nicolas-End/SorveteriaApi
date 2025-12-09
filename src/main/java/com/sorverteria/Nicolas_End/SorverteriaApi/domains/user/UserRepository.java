@@ -16,6 +16,5 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     RequestEmailDTO findByEmailAndRole(String email, UserRole role);
 
     ArrayList<UserSummaryDTO> findByRole(UserRole role);//  pegar os usuarios cadastrado pelo cargo
-
-     void deleteByEmail(String email);
+    
 }
