@@ -2,7 +2,7 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.popsicle.RequestPopsicleIdDTO;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

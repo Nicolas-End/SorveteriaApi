@@ -24,9 +24,15 @@ public class EmployeerController {
 
 
     @PostMapping("/register-new-popsicle")
-    public ResponseEntity registerNewPopsicle(@RequestBody PopsicleEntity popsicleEntity){
-        return this.popsicleService.registerNewPopsicle(popsicleEntity);
+    public ResponseEntity registerNewPopsicle(@RequestBody PopsicleEntity datas){
+        return this.popsicleService.registerNewPopsicle(datas);
     }
+
+    @PostMapping("/update-popsicle-datas")
+    public ResponseEntity updatePopsicleData(@RequestBody PopsicleEntity datas){
+        return this.popsicleService.registerNewPopsicle(datas);
+    }
+
 
     @DeleteMapping("/delete-popsicle/{id}")
     public ResponseEntity dropPopsicleById(@PathVariable UUID id){

@@ -1,7 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.RequestEmailDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.UserSummaryDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.RegisterDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
@@ -38,10 +37,10 @@ public class AdminController {
         return userService.getUsersByRole(UserRole.EMPLOYEER);
     }
 
-    @DeleteMapping("/drop-employeer")
-    public ResponseEntity deleteEmployeers(@RequestBody RequestEmailDTO data){
+    @DeleteMapping("/drop-employeer/{email}")
+    public ResponseEntity deleteEmployeers(@PathVariable String email){
         // exclui o funcionario do banco de dados
-        return userService.dropEmployeer(data);
+        return userService.dropEmployeer(email);
     }
 
 }

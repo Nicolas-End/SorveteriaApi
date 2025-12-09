@@ -18,7 +18,7 @@ public class OrderEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "popsicle_id")
     private PopsicleEntity popsicle;
 

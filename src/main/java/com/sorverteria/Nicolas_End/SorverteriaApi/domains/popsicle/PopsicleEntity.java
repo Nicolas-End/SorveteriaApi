@@ -1,8 +1,10 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Entity
@@ -23,5 +25,7 @@ public class PopsicleEntity {
     @Column(nullable = false)
     private double priceByUnit;
 
-
+    // apaga todos os pedidos relacionados este sorvete
+    @OneToMany(mappedBy = "popsicle", cascade = CascadeType.REMOVE)
+    private ArrayList<OrderEntity> orders;
 }

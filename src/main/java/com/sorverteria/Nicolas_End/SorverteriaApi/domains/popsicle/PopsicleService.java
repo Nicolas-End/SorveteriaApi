@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle;
 
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,11 @@ public class PopsicleService {
     }
 
     public ResponseEntity registerNewPopsicle(PopsicleEntity popsicleEntity){
-        if (popsicleRepository.findByFlavor(popsicleEntity.getFlavor()) != null) return ResponseEntity.badRequest().build();
+
+        if (popsicleRepository.findByFlavor(popsicleEntity.getFlavor()) != null) return ResponseEntity.status(HttpStatus.CONFLICT).body("Sabor ja cadastrado");
+
         popsicleRepository.save(popsicleEntity);
+
         return ResponseEntity.ok("Sorvete Cadastrado com sucesso");
     }
 
@@ -25,7 +29,7 @@ public class PopsicleService {
         Optional popsicleDatas = popsicleRepository.findById(id);
 
         if (popsicleDatas == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
 
         return  ResponseEntity.ok(popsicleDatas);
@@ -33,17 +37,28 @@ public class PopsicleService {
     }
 
     public ResponseEntity getAllPopsicle(){
-        if (popsicleRepository.findAll() == null ) return ResponseEntity.noContent().build();
+        if (popsicleRepository.findAll() == null ) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(popsicleRepository.findAll());
     }
 
     @Transactional
     public ResponseEntity dropPopsicle(UUID id){
 
-        if(popsicleRepository.findById(id) == null) return ResponseEntity.badRequest().build();
+        if(popsicleRepository.findById(id) == null) return ResponseEntity.notFound().build();
+
 
         popsicleRepository.deleteById(id);
 
         return ResponseEntity.ok("Sorvete Deletado");
+    }
+
+    public ResponseEntity updatePopsicleDatas(PopsicleEntity datas){
+        if(this.popsicleRepository.findById(datas.getId()) == null ) return ResponseEntity.notFound().build();
+
+
+        this.popsicleRepository.save(datas);
+
+        return ResponseEntity.ok("informações atualizadas");
+
     }
 }

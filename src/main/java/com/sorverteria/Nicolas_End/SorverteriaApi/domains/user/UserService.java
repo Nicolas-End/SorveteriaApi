@@ -53,14 +53,14 @@ public class UserService {
 
 
     @Transactional // garante que todas ações serão realizadas em caso de erro é desfeito
-    public ResponseEntity dropEmployeer(RequestEmailDTO data){
+    public ResponseEntity dropEmployeer(String email) {
 
         // verifica se o usuario é employeer mesmo
 
-            if (this.userRepository.findByEmailAndRole(data.email(), UserRole.EMPLOYEER) == null){
+            if (this.userRepository.findByEmailAndRole(email, UserRole.EMPLOYEER) == null){
             return ResponseEntity.badRequest().build();
         }
-        this.userRepository.deleteById(data.email());
+        this.userRepository.deleteById(email);
         return ResponseEntity.ok("Funcionario Apagado com sucesso");
 
     }
