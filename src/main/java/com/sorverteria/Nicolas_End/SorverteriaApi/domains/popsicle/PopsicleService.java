@@ -17,7 +17,8 @@ public class PopsicleService {
         this.popsicleRepository = popsicleRepository;
     }
 
-    public ResponseEntity registerNewPopsicle(PopsicleEntity popsicleEntity){
+    
+    public ResponseEntity registerNewPopsicle(PopsicleEntity popsicleEntity){// Adiciona um novo picole no registro da sorveteria
 
         if (popsicleRepository.findByFlavor(popsicleEntity.getFlavor()) != null) return ResponseEntity.status(HttpStatus.CONFLICT).body("Sabor ja cadastrado");
 
@@ -26,7 +27,7 @@ public class PopsicleService {
         return ResponseEntity.ok("Sorvete Cadastrado com sucesso");
     }
 
-    public ResponseEntity getPopsicleById(UUID id){
+    public ResponseEntity getPopsicleById(UUID id){// serve para caso de consultas
         Optional popsicleDatas = popsicleRepository.findById(id);
 
         if (popsicleDatas.isEmpty()){
@@ -43,8 +44,8 @@ public class PopsicleService {
     }
 
     @Transactional
-    public ResponseEntity dropPopsicle(UUID id){
-
+    public ResponseEntity dropPopsicle(UUID id){// deleta um picole cadastrado em caso de erro
+    // obs; esse sitema tbm deleta os pedidos relacionados, pois esta no modo cascata veja em PopsicleEntity
         if(popsicleRepository.findById(id).isEmpty()) return ResponseEntity.notFound().build();
 
 
@@ -56,7 +57,7 @@ public class PopsicleService {
 
     public ResponseEntity updatePopsicleDatas(UUID id, PopsicleDatasWithoutIdDTO datas){
         PopsicleEntity popsicleEntity = this.popsicleRepository.findById(id).orElse(null);
-        if(popsicleEntity == null ) return ResponseEntity.notFound().build();
+        if(popsicleEntity == null ) return ResponseEntity.notFound().build(); // verifica de se o popsicle existe no sistema
 
         // sistema para atualizar os dados de um sorvete
         popsicleEntity.setFlavor(datas.flavor());
@@ -67,13 +68,13 @@ public class PopsicleService {
         popsicleEntity.setQuantityInStock(datas.quantityInStock());
 
 
-        this.popsicleRepository.save(popsicleEntity);
+        this.popsicleRepository.save(popsicleEntity);// atualiza os dados do picóle 
 
         return ResponseEntity.ok("informações atualizadas");
 
     }
 
-    public PopsicleEntity verifyPopsicleId(UUID id){
+    public PopsicleEntity verifyPopsicleId(UUID id){// verica se o picole foi cadastrado utilizado em OrderService
         return popsicleRepository.findById(id)
                 .orElse(null);
 
