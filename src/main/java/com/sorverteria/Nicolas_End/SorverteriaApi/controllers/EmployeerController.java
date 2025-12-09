@@ -2,6 +2,7 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.popsicle.PopsicleDatasWithoutIdDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,9 @@ public class EmployeerController {
         return this.popsicleService.registerNewPopsicle(datas);
     }
 
-    @PostMapping("/update-popsicle-datas")
-    public ResponseEntity updatePopsicleData(@RequestBody PopsicleEntity datas){
-        return this.popsicleService.registerNewPopsicle(datas);
+    @PostMapping("/update-popsicle-datas/{id}")
+    public ResponseEntity updatePopsicleData(@PathVariable UUID id, @RequestBody PopsicleDatasWithoutIdDTO datas){
+        return this.popsicleService.updatePopsicleDatas(id, datas);
     }
 
 

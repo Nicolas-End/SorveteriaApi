@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,5 +28,5 @@ public class PopsicleEntity {
 
     // apaga todos os pedidos relacionados este sorvete
     @OneToMany(mappedBy = "popsicle", cascade = CascadeType.REMOVE)
-    private ArrayList<OrderEntity> orders;
+    private List<OrderEntity> orders = new ArrayList<>();
 }

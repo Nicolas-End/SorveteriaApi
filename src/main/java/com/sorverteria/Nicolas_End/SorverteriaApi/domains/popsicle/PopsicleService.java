@@ -1,5 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.popsicle.PopsicleDatasWithoutIdDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,13 +54,29 @@ public class PopsicleService {
     }
 
 
-    public ResponseEntity updatePopsicleDatas(PopsicleEntity datas){
-        if(this.popsicleRepository.findById(datas.getId()) == null ) return ResponseEntity.notFound().build();
+    public ResponseEntity updatePopsicleDatas(UUID id, PopsicleDatasWithoutIdDTO datas){
+        PopsicleEntity popsicleEntity = this.popsicleRepository.findById(id).orElse(null);
+        if(popsicleEntity == null ) return ResponseEntity.notFound().build();
+
+        // sistema para atualizar os dados de um sorvete
+        popsicleEntity.setFlavor(datas.flavor());
+        if (datas.priceByUnit() < 0 || datas.quantityInStock() <0){
+            return ResponseEntity.badRequest().body("Valores Invalidos");
+        }
+        popsicleEntity.setPriceByUnit(datas.priceByUnit());
+        popsicleEntity.setQuantityInStock(datas.quantityInStock());
 
 
-        this.popsicleRepository.save(datas);
+        this.popsicleRepository.save(popsicleEntity);
 
         return ResponseEntity.ok("informações atualizadas");
+
+    }
+
+    public PopsicleEntity verifyPopsicleId(UUID id){
+        return popsicleRepository.findById(id)
+                .orElse(null);
+
 
     }
 }
