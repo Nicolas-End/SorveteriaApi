@@ -40,7 +40,7 @@ public class SecurityConfigurations {
                         .requestMatchers("/admin").hasRole("ADMIN")
 
                         // ADMIN e EMPLOYEER acessam /employeer
-                        .requestMatchers("/employeer").hasAnyRole("ADMIN", "EMPLOYEER")
+                            .requestMatchers("/employeer").hasAnyRole( "EMPLOYEER","ADMIN")
 
                         // ADMIN, EMPLOYEER e COSTUMER acessam /costumer
                         .requestMatchers("/costumer").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")

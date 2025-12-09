@@ -1,7 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.infra.security;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.domain.user.UserEntity;
-import jakarta.persistence.Entity;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 

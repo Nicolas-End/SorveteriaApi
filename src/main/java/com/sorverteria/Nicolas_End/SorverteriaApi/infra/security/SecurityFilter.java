@@ -1,7 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.infra.security;
 
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.domain.user.UserRepository;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
