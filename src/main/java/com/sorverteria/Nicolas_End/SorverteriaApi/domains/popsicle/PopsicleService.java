@@ -28,7 +28,7 @@ public class PopsicleService {
     public ResponseEntity getPopsicleById(UUID id){
         Optional popsicleDatas = popsicleRepository.findById(id);
 
-        if (popsicleDatas == null){
+        if (popsicleDatas.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
@@ -37,20 +37,21 @@ public class PopsicleService {
     }
 
     public ResponseEntity getAllPopsicle(){
-        if (popsicleRepository.findAll() == null ) return ResponseEntity.notFound().build();
+        if (popsicleRepository.findAll().isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(popsicleRepository.findAll());
     }
 
     @Transactional
     public ResponseEntity dropPopsicle(UUID id){
 
-        if(popsicleRepository.findById(id) == null) return ResponseEntity.notFound().build();
+        if(popsicleRepository.findById(id).isEmpty()) return ResponseEntity.notFound().build();
 
 
         popsicleRepository.deleteById(id);
 
         return ResponseEntity.ok("Sorvete Deletado");
     }
+
 
     public ResponseEntity updatePopsicleDatas(PopsicleEntity datas){
         if(this.popsicleRepository.findById(datas.getId()) == null ) return ResponseEntity.notFound().build();
