@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,8 +40,9 @@ public class PopsicleService {
     }
 
     public ResponseEntity getAllPopsicle(){
-        if (popsicleRepository.findAll().isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(popsicleRepository.findAll());
+        List<PopsicleEntity> allPopsicles = popsicleRepository.findAll();
+        if (allPopsicles.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(allPopsicles);
     }
 
     @Transactional

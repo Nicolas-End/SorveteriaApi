@@ -41,4 +41,10 @@ public class CostumerController {
         return this.orderService.registerNewOrder(data);
 
     }
+
+
+    @GetMapping("/get-my-orders")// retornar todas os pedidos do usuario pela credencial
+    public ResponseEntity getMyOrders(){
+        return orderService.getMyOrders();
+    }
 }

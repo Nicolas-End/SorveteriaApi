@@ -17,10 +17,6 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
     @ManyToOne()
     @JoinColumn(name = "popsicle_id")
     private PopsicleEntity popsicle;
@@ -28,5 +24,8 @@ public class OrderEntity {
     @Column(nullable = false)
     private int quantityOrdered;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }
