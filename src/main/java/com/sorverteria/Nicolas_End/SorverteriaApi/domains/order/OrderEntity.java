@@ -1,5 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.order;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntity;
@@ -23,6 +24,10 @@ public class OrderEntity {
 
     @Column(nullable = false)
     private int quantityOrdered;
+
+    @Enumerated(EnumType.STRING)    
+    @Column(nullable = false)
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -45,6 +45,11 @@ public class CostumerController {
 
     @GetMapping("/get-my-orders")// retornar todas os pedidos do usuario pela credencial
     public ResponseEntity getMyOrders(){
-        return orderService.getMyOrders();
+        return orderService.getAllMyOrders();
+    }
+
+    @DeleteMapping("/delete-order-by-id/{id}")
+    public ResponseEntity deleteMyOrder(@PathVariable UUID id){
+        return orderService.deleteMyOrder(id);
     }
 }

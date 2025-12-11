@@ -6,6 +6,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleServi
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.OrdersDatasDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -43,6 +46,7 @@ public class OrderService {
 
         OrderEntity order = new OrderEntity();
         order.setPopsicle(popsicle);
+        order.setStatus(OrderStatus.PENDENTE);
         order.setUser(authUser.get());
         order.setQuantityOrdered(data.quantityOrdered());
 
@@ -50,22 +54,30 @@ public class OrderService {
         return ResponseEntity.ok("Pedido Cadastrado com sucesso");
     }
 
-    public ResponseEntity getMyOrders(){
+    public ResponseEntity getAllMyOrders(){
         List<OrderEntity> orders = orderRepository.findByUser(authUser.get());
         if (orders.isEmpty()) return ResponseEntity.notFound().build();
 
         List<OrdersDatasDTO> ordersDatas = orders.stream()// percorre kd objto da lista
                 .map(order -> new OrdersDatasDTO( // map permite a modificação da lista
                         order.getId(),
+                        order.getStatus(),
                         order.getPopsicle().getFlavor(),
                         order.getPopsicle().getPriceByUnit(),
                         order.getQuantityOrdered()
                 )).toList(); // esse codigo "retransforma" a lista ordes para o formato que eu desejo
-
-
-
-
-
         return ResponseEntity.ok(ordersDatas);
+    }
+
+    
+
+
+    @Transactional
+    public ResponseEntity deleteMyOrder(UUID id){
+        List<OrderEntity> order = orderRepository.findByIdAndUser(id,authUser.get());
+        if (order.isEmpty()) return ResponseEntity.notFound().build();
+
+        orderRepository.deleteByIdAndUser(id, authUser.get());
+        return ResponseEntity.ok("Pedido deletado com sucesso");
     }
 }
