@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum OrderStatus {
 
     PENDENTE("PENDENTE"),
+    PROCESSANDO("PROCESSANDO"),
     ENTREGUE("ENTREGUE");
     private final String status;
 

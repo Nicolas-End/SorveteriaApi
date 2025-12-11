@@ -10,7 +10,6 @@ import java.util.UUID;
 public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     List<OrderEntity> findByUser(UserEntity user);
 
-    List<OrderEntity> findByIdAndUser(UUID id, UserEntity user);
+    OrderEntity findByIdAndUser(UUID id, UserEntity user);
 
-    void deleteByIdAndUser(UUID id , UserEntity user);
 }

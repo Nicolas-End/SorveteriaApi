@@ -5,6 +5,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleRepos
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.OrdersDatasDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
@@ -13,9 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -69,15 +69,29 @@ public class OrderService {
         return ResponseEntity.ok(ordersDatas);
     }
 
-    
+    public ResponseEntity UpdateOrdersInfos(){// função que ira modificar todas as informações do pedido
+        return ResponseEntity.ok("Informações modificadas");
+    }
 
 
     @Transactional
     public ResponseEntity deleteMyOrder(UUID id){
-        List<OrderEntity> order = orderRepository.findByIdAndUser(id,authUser.get());
-        if (order.isEmpty()) return ResponseEntity.notFound().build();
+        OrderEntity order = orderRepository.findByIdAndUser(id,authUser.get());
+        if (order == null) return ResponseEntity.notFound().build();
 
-        orderRepository.deleteByIdAndUser(id, authUser.get());
+        orderRepository.delete(order);// deleta pesquisando pela proria entidade em questão
+
         return ResponseEntity.ok("Pedido deletado com sucesso");
+    }
+
+    public ResponseEntity updateOrderStatus(UUID id, RequestNewStatusDTO data){
+        OrderEntity order = orderRepository.findByIdAndUser(id,authUser.get());
+            if (order == null) return ResponseEntity.notFound().build();
+
+        order.setStatus(data.newStatus());
+
+        orderRepository.save(order);
+
+        return ResponseEntity.ok("Status do pedido modificado com sucesso");
     }
 }

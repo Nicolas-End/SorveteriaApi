@@ -4,7 +4,9 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,4 +54,10 @@ public class CostumerController {
     public ResponseEntity deleteMyOrder(@PathVariable UUID id){
         return orderService.deleteMyOrder(id);
     }
+
+    @PostMapping("/update-order-status/{id}")
+   public ResponseEntity updateOrderStatus(@PathVariable UUID id, @RequestBody RequestNewStatusDTO data){
+        return orderService.updateOrderStatus(id,data);
+    }
+
 }
