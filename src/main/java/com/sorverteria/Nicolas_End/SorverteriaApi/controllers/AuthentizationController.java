@@ -36,4 +36,5 @@ public class AuthentizationController {
     public ResponseEntity register(@RequestBody RegisterDTO data ){
         return userService.register(data, UserRole.COSTUMER);
     }
+
 }

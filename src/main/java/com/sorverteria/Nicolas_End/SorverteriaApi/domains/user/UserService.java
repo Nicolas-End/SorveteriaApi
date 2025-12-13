@@ -2,11 +2,13 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.domains.user;
 
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.*;
+import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.TokenService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
@@ -18,11 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final AuthenticatedUser authUser;
 
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, TokenService tokenService){
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, TokenService tokenService, AuthenticatedUser authUser){
         this.userRepository=userRepository;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.authUser = authUser;
     }
 
 
@@ -62,6 +66,15 @@ public class UserService {
         }
         this.userRepository.deleteById(email);
         return ResponseEntity.ok("Funcionario Apagado com sucesso");
+
+    }
+
+    public ResponseEntity updateUserCpf(RequestNewCpfDTO data){
+        authUser.get().setCpf(data.cpf());
+
+        userRepository.save(authUser.get());
+
+        return ResponseEntity.ok("Novo cpf cadastrado com sucesso");
 
     }
 

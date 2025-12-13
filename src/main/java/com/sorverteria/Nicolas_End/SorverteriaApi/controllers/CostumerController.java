@@ -4,9 +4,10 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.RequestNewCpfDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,12 @@ public class CostumerController {
 
     private final PopsicleService popsicleService;
     private final OrderService orderService;
-    public  CostumerController(PopsicleService popsicleService, OrderService orderService){
+    private final UserService userService;
+
+    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService){
         this.popsicleService = popsicleService;
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -59,5 +63,11 @@ public class CostumerController {
    public ResponseEntity updateOrderStatus(@PathVariable UUID id, @RequestBody RequestNewStatusDTO data){
         return orderService.updateOrderStatus(id,data);
     }
+
+    @PostMapping("/update-own-cpf")
+    public ResponseEntity UpdateOwnCpf(@RequestBody RequestNewCpfDTO data){
+        return userService.updateUserCpf(data);
+    }
+
 
 }
