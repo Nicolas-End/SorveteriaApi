@@ -35,8 +35,8 @@ public class OrderService {
     public ResponseEntity registerNewOrder(RequestOrderWithOutIdDTO data){
 
         PopsicleEntity popsicle = popsicleService.verifyPopsicleId(data.popsicleId());
-
-        if (data.quantityOrdered() > popsicle.getQuantityInStock()) return ResponseEntity.status(HttpStatus.CONFLICT).body("Não pode pedir mais do que há no estoque");
+        if (popsicle.getQuantityInStock() == 0 ) return ResponseEntity.status(HttpStatus.CONFLICT).body("produto sem estoque");
+        if (data.quantityOrdered() > popsicle.getQuantityInStock()) return ResponseEntity.status(HttpStatus.CONFLICT).body("quantidade insuficiente");
 
 
         popsicle.setQuantityInStock(popsicle.getQuantityInStock()-data.quantityOrdered());
@@ -79,6 +79,11 @@ public class OrderService {
         OrderEntity order = orderRepository.findByIdAndUser(id,authUser.get());
         if (order == null) return ResponseEntity.notFound().build();
 
+        PopsicleEntity popsicle = popsicleService.verifyPopsicleId(order.getPopsicle().getId());
+
+        popsicle.setQuantityInStock(popsicle.getQuantityInStock() + order.getQuantityOrdered());
+
+        popsicleRepository.save(popsicle);
         orderRepository.delete(order);// deleta pesquisando pela proria entidade em questão
 
         return ResponseEntity.ok("Pedido deletado com sucesso");
