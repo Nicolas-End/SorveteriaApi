@@ -18,7 +18,7 @@ public class UserController {// aqui o usuario podera mudar suas informações
 
     @GetMapping
     public String hello (){
-        return "Hello to the costumer Page";
+        return "Hello to the User Page";
     }
 
 
