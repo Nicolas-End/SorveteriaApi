@@ -64,10 +64,5 @@ public class CostumerController {
         return orderService.updateOrderStatus(id,data);
     }
 
-    @PostMapping("/update-own-cpf")
-    public ResponseEntity UpdateOwnCpf(@RequestBody RequestNewCpfDTO data){
-        return userService.updateUserCpf(data);
-    }
-
 
 }

@@ -45,6 +45,7 @@ public class SecurityConfigurations {
                         // ADMIN, EMPLOYEER e COSTUMER acessam /costumer
                         .requestMatchers("/costumer").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")
 
+                        .requestMatchers("/user").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
                         // Qualquer outra requisição precisa de autenticação
                         .anyRequest().authenticated()
                 )
