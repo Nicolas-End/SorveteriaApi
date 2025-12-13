@@ -6,10 +6,11 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.UserSummaryDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 
-
+@Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
     UserDetails findByEmail(String email);
 

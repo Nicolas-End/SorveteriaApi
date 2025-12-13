@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 
@@ -20,11 +21,13 @@ public class CostumerController {
     private final PopsicleService popsicleService;
     private final OrderService orderService;
     private final UserService userService;
+    private final FruitsService fruitsService;
 
-    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService){
+    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, FruitsService fruitsService){
         this.popsicleService = popsicleService;
         this.orderService = orderService;
         this.userService = userService;
+        this.fruitsService = fruitsService;
     }
 
     @GetMapping
@@ -42,12 +45,12 @@ public class CostumerController {
         return  this.popsicleService.getAllPopsicle();
     }
 
+
+
     @PostMapping("/register-new-order")
     public ResponseEntity registerNewOrder(@RequestBody RequestOrderWithOutIdDTO data){
         return this.orderService.registerNewOrder(data);
-
     }
-
 
     @GetMapping("/get-my-orders")// retornar todas os pedidos do usuario pela credencial
     public ResponseEntity getMyOrders(){
@@ -60,9 +63,19 @@ public class CostumerController {
     }
 
     @PostMapping("/update-order-status/{id}")
-   public ResponseEntity updateOrderStatus(@PathVariable UUID id, @RequestBody RequestNewStatusDTO data){
+    public ResponseEntity updateOrderStatus(@PathVariable UUID id, @RequestBody RequestNewStatusDTO data){
         return orderService.updateOrderStatus(id,data);
     }
 
+
+    @GetMapping("/get-all-fruits")
+    public ResponseEntity getAllFruits(){
+        return this.fruitsService.getAllFruits();
+    }
+
+    @GetMapping("/get-fruit/{id}")
+    public ResponseEntity getInfoFruit(@PathVariable UUID id){
+        return this.fruitsService.getInfoFruitWithouIdAndAcais(id);
+    }
 
 }
