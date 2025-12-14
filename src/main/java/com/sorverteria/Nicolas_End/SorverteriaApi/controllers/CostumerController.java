@@ -6,6 +6,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
@@ -23,12 +24,14 @@ public class CostumerController {
     private final OrderService orderService;
     private final AccompanimentService accompanimentService;
     private final FruitsService fruitsService;
+    private final SweetService sweetService;
 
-    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, AccompanimentService accompanimentService, FruitsService fruitsService){
+    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, AccompanimentService accompanimentService, FruitsService fruitsService, SweetService sweetService){
         this.popsicleService = popsicleService;
         this.orderService = orderService;
         this.accompanimentService = accompanimentService;
         this.fruitsService = fruitsService;
+        this.sweetService = sweetService;
     }
 
     @GetMapping
@@ -36,12 +39,12 @@ public class CostumerController {
         return "Hello to the costumer Page";
     }
 
-    @PostMapping("/get-popsicle-by-id/{id}")
+    @GetMapping("/get-popsicle-by-id/{id}")
     public ResponseEntity getPopsicleById(@PathVariable UUID id){
         return this.popsicleService.getPopsicleById(id);
     }
 
-    @PostMapping("/get-popsicles")
+    @GetMapping("/get-popsicles")
     public ResponseEntity getAllPopsicle(){
         return  this.popsicleService.getAllPopsicle();
     }
@@ -86,6 +89,16 @@ public class CostumerController {
     @GetMapping("/get-all-accompaniment")
     public ResponseEntity getAllAccompaniment(){
         return this.accompanimentService.getAllAccompaniment();
+    }
+
+
+    @GetMapping("/get-sweet-info/{id}")
+    public ResponseEntity getSweetInfo(@PathVariable UUID id){
+        return this.sweetService.getSweetInfoToCustomer(id);
+    }
+    @GetMapping("/get-all-sweet")
+    public ResponseEntity getAllSweet(){
+        return this.sweetService.getAllSweets();
     }
 
 }

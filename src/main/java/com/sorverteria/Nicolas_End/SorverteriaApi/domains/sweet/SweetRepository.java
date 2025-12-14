@@ -7,4 +7,7 @@ import java.util.UUID;
 
 @Repository
 public interface SweetRepository extends JpaRepository<SweetEntity, UUID> {
+    SweetEntity findByName(String name);
+
+
 }
