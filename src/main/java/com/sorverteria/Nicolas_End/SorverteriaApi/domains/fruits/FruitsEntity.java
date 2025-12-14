@@ -25,6 +25,7 @@ public class FruitsEntity {
 
     @ManyToMany
     @JoinTable(name = "TB_FRUITS_ACAI",
+
             joinColumns = @JoinColumn(name = "fruits_entity_id"),
             inverseJoinColumns = @JoinColumn(name = "acai_to_delivery_id"))
     private Set<AcaiToDeliveryEntity> acaiToDeliveryEntities = new LinkedHashSet<>();

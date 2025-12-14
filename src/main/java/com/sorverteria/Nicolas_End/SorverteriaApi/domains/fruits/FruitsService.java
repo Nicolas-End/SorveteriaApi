@@ -1,7 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits;
 
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.FruitDatasWithoutIdDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameAndQuantityDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.RequestNewFruitQuantityDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -19,15 +19,15 @@ public class FruitsService {
         this.fruitsRepository = fruitsRepository;
     }
 
-    public ResponseEntity addNewFruit(FruitDatasWithoutIdDTO data){
-        if(fruitsRepository.findByFruitName(data.fruitName()) != null){
+    public ResponseEntity addNewFruit(NameAndQuantityDTO data){
+        if(fruitsRepository.findByFruitName(data.name()) != null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Fruta já cadastrada no sistema");
 
         }
 
         FruitsEntity fruit = new FruitsEntity();
 
-        fruit.setFruitName(data.fruitName());
+        fruit.setFruitName(data.name());
         fruit.setQuantityInStock(data.quantityInStock());
 
         fruitsRepository.save(fruit);
@@ -60,7 +60,7 @@ public class FruitsService {
 
         if(fruit == null) return ResponseEntity.notFound().build();
 
-        FruitDatasWithoutIdDTO fruitWithoutId = new FruitDatasWithoutIdDTO(fruit.getQuantityInStock(),fruit.getFruitName());
+        NameAndQuantityDTO fruitWithoutId = new NameAndQuantityDTO(fruit.getQuantityInStock(),fruit.getFruitName());
 
 
         return ResponseEntity.ok(fruitWithoutId);

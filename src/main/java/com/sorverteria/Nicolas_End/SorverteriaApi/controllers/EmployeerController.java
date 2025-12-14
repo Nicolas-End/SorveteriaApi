@@ -1,9 +1,11 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentEntity;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.FruitDatasWithoutIdDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameAndQuantityDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.RequestNewFruitQuantityDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.popsicle.PopsicleDatasWithoutIdDTO;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,12 @@ public class EmployeerController {
 
     private final PopsicleService popsicleService;
     private final FruitsService fruitsService;
+    private final AccompanimentService accompanimentService;
 
-    public EmployeerController(PopsicleService popsicleService, FruitsService fruitsService){
+    public EmployeerController(PopsicleService popsicleService, FruitsService fruitsService, AccompanimentService accompanimentService){
         this.popsicleService = popsicleService;
         this.fruitsService = fruitsService;
+        this.accompanimentService = accompanimentService;
     }
 
     @GetMapping
@@ -48,8 +52,9 @@ public class EmployeerController {
     public ResponseEntity deleteFruit(@PathVariable UUID id){
         return this.fruitsService.deleteFruit(id);
     }
+
     @PostMapping("/add-new-fruit")
-    public ResponseEntity addNewFruit(@RequestBody FruitDatasWithoutIdDTO datas){
+    public ResponseEntity addNewFruit(@RequestBody NameAndQuantityDTO datas){
         return fruitsService.addNewFruit(datas);
     }
 
@@ -61,5 +66,10 @@ public class EmployeerController {
     @GetMapping("/get-fruit-all-info/{id}")
     public ResponseEntity getAllFruitInfo(@PathVariable UUID id){
         return fruitsService.getInfoFruit(id);
+    }
+
+    @PostMapping("/add-new-accompaniment")
+    public ResponseEntity addNewAccompaniment(@RequestBody NameAndQuantityDTO accompaniment){
+        return this.accompanimentService.addNewAccompaniment(accompaniment);
     }
 }
