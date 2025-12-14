@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
@@ -20,13 +21,13 @@ public class CostumerController {
 
     private final PopsicleService popsicleService;
     private final OrderService orderService;
-    private final UserService userService;
+    private final AccompanimentService accompanimentService;
     private final FruitsService fruitsService;
 
-    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, FruitsService fruitsService){
+    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, AccompanimentService accompanimentService, FruitsService fruitsService){
         this.popsicleService = popsicleService;
         this.orderService = orderService;
-        this.userService = userService;
+        this.accompanimentService = accompanimentService;
         this.fruitsService = fruitsService;
     }
 
@@ -76,6 +77,15 @@ public class CostumerController {
     @GetMapping("/get-fruit/{id}")
     public ResponseEntity getInfoFruit(@PathVariable UUID id){
         return this.fruitsService.getInfoFruitWithouIdAndAcais(id);
+    }
+
+    @GetMapping("/get-accompaniment/{id}")
+    public ResponseEntity getInfoAccompaniment(@PathVariable UUID id){
+        return this.accompanimentService.getInfoAccompanimentToCostumer(id);
+    }
+    @GetMapping("/get-all-accompaniment")
+    public ResponseEntity getAllAccompaniment(){
+        return this.accompanimentService.getAllAccompaniment();
     }
 
 }

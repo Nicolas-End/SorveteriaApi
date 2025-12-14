@@ -8,4 +8,6 @@ import java.util.UUID;
 @Repository
 public interface AccompanimentRepository extends JpaRepository<AccompanimentEntity, UUID> {
     AccompanimentEntity findByName(String name);
+
+
 }

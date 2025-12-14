@@ -2,7 +2,8 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits;
 
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameAndQuantityDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.RequestNewFruitQuantityDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameQuantityAndIdDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.QuantityDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class FruitsService {
         return ResponseEntity.ok("Fruta cadastrada");
     }
 
-    public ResponseEntity updateFruitQuantity(UUID id, RequestNewFruitQuantityDTO data){
+    public ResponseEntity updateFruitQuantity(UUID id, QuantityDTO data){
         FruitsEntity fruit = fruitsRepository.findById(id).orElse(null);
 
         if(fruit == null) return ResponseEntity.notFound().build();
@@ -52,7 +53,14 @@ public class FruitsService {
 
         if(fruits.isEmpty()) return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(fruits);
+        List<NameQuantityAndIdDTO> datas = fruits.stream()
+                .map(fruit -> new NameQuantityAndIdDTO(
+                        fruit.getId(),
+                        fruit.getFruitName(),
+                        fruit.getQuantityInStock()
+                )).toList();
+
+        return ResponseEntity.ok(datas);
     }
 
     public ResponseEntity getInfoFruitWithouIdAndAcais(UUID id){// n retona o id e nem os açais para entregar

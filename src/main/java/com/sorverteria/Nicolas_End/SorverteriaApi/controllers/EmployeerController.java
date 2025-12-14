@@ -1,12 +1,11 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameAndQuantityDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.RequestNewFruitQuantityDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.QuantityDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.popsicle.PopsicleDatasWithoutIdDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +58,7 @@ public class EmployeerController {
     }
 
     @PostMapping("/update-fruit-quantity/{id}")
-    public ResponseEntity updateFruitQuantity(@PathVariable UUID id, @RequestBody RequestNewFruitQuantityDTO data){
+    public ResponseEntity updateFruitQuantity(@PathVariable UUID id, @RequestBody QuantityDTO data){
         return fruitsService.updateFruitQuantity(id, data);
     }
 
@@ -68,8 +67,20 @@ public class EmployeerController {
         return fruitsService.getInfoFruit(id);
     }
 
+
     @PostMapping("/add-new-accompaniment")
     public ResponseEntity addNewAccompaniment(@RequestBody NameAndQuantityDTO accompaniment){
         return this.accompanimentService.addNewAccompaniment(accompaniment);
     }
+
+    @PostMapping("/update-quantity-accompaniment/{id}")
+    public ResponseEntity updateAccompanimentQuantity(@RequestBody QuantityDTO data, @PathVariable UUID id){
+        return this.accompanimentService.updateQuantity(id, data.quantity());
+    }
+
+    @DeleteMapping("/delete-accompaniment/{id}")
+    public ResponseEntity deleteAccompaniment(@PathVariable UUID id){
+        return this.accompanimentService.deleteAccompaniment(id);
+    }
+
 }
