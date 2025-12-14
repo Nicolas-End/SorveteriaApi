@@ -50,7 +50,7 @@ public class FruitsService {
     public ResponseEntity getAllFruits(){
         List<FruitsEntity> fruits = fruitsRepository.findAll();
 
-        if(fruits.isEmpty()) return ResponseEntity.ok("nenhuma fruta cadastrada");
+        if(fruits.isEmpty()) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(fruits);
     }
