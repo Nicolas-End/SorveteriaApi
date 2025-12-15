@@ -1,5 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.user ;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiToDeliveryEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
 
 import jakarta.persistence.*;
@@ -9,7 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="TB_USERS")
@@ -34,6 +37,14 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,unique = false)
     private UserRole role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "TB_ACAI_USERS",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "acai_id")
+    )
+    private Set<AcaiToDeliveryEntity> acais = new HashSet<>();
 
     public UserEntity (String email, String name, String password, UserRole role){
         this.email = email;

@@ -22,13 +22,8 @@ public class AccompanimentEntity {
     @Column
     private int QuantityInStock;
 
-    @ManyToMany
-    @JoinTable(
-            name = "TB_ACCOMPANIMENT_ACAI",
-            joinColumns = @JoinColumn(name="accompaniment_id"), // ID dessa entidade
-            inverseJoinColumns = @JoinColumn(name="acai_id")    // ID da outra entidade
-    )
-    private Set<AcaiToDeliveryEntity> acai = new HashSet<>();
+    @ManyToMany(mappedBy = "accompaniment")// lado dominado pelo açai
+    private Set<AcaiToDeliveryEntity> acais = new HashSet<>();
 
 
 }

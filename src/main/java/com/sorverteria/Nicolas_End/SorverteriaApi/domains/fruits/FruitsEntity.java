@@ -23,11 +23,7 @@ public class FruitsEntity {
     @Column
     private String fruitName;
 
-    @ManyToMany
-    @JoinTable(name = "TB_FRUITS_ACAI",
-
-            joinColumns = @JoinColumn(name = "fruits_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "acai_to_delivery_id"))
-    private Set<AcaiToDeliveryEntity> acaiToDeliveryEntities = new LinkedHashSet<>();
+    @ManyToMany(mappedBy = "fruits")
+    private Set<AcaiToDeliveryEntity> acais = new LinkedHashSet<>();
 
 }
