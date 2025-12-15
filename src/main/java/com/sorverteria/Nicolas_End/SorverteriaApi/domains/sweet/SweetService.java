@@ -82,6 +82,9 @@ public class SweetService {
         return ResponseEntity.ok("Deletado com sucesso");
     }
 
+    public List<SweetEntity> findManyById(List<UUID> sweetIds) {
+        return sweetRepository.findAllById(sweetIds);
 
+    }
 
 }

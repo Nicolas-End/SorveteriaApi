@@ -6,6 +6,8 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,7 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name="TB_ACAI_TO_DELIVERY")
-public class AcaiToDeliveryEntity {
+@Data
+public class AcaiEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -46,6 +49,7 @@ public class AcaiToDeliveryEntity {
             inverseJoinColumns = @JoinColumn(name = "sweet_entity_id"))
     private Set<SweetEntity> sweet = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "acais")
-    private Set<UserEntity> users = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name="user_id",nullable = false)
+    private UserEntity user;
 }

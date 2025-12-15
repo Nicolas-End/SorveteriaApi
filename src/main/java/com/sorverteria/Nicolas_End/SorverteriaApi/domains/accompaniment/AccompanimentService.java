@@ -1,5 +1,6 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment;
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiRepository;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameAndQuantityDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.NameQuantityAndIdDTO;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,9 @@ import java.util.UUID;
 public class AccompanimentService {
     private final AccompanimentRepository accompanimentRepository;
 
-    public AccompanimentService(AccompanimentRepository accompanimentRepository){
+    public AccompanimentService(AccompanimentRepository accompanimentRepository, AcaiRepository acaiRepository){
         this.accompanimentRepository = accompanimentRepository;
+
     }
 
     public ResponseEntity addNewAccompaniment(NameAndQuantityDTO accompaniment){
@@ -71,6 +73,10 @@ public class AccompanimentService {
         return ResponseEntity.ok("Deletado com sucesso");
     }
 
+    public List<AccompanimentEntity> findManyByIds(List<UUID> accompanimentIds){
+        return accompanimentRepository.findAllById(accompanimentIds);
 
+
+    }
 
 }

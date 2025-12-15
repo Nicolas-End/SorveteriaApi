@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface AcaiToDeliveryRepository extends JpaRepository<AcaiToDeliveryEntity, UUID> {
+public interface AcaiRepository extends JpaRepository<AcaiEntity, UUID> {
 }

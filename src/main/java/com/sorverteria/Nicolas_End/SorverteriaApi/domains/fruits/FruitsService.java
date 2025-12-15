@@ -92,6 +92,8 @@ public class FruitsService {
         return ResponseEntity.ok("Fruta deletada com sucesso");
     }
 
+    public List<FruitsEntity> findManyByIds(List<UUID> fruitIds) {
+        return fruitsRepository.findAllById(fruitIds);
 
-
+    }
 }

@@ -1,7 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet;
 
 import jakarta.persistence.*;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiToDeliveryEntity;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiEntity;
 import lombok.Data;
 
 import java.util.LinkedHashSet;
@@ -24,6 +24,6 @@ public class SweetEntity {
     private int quantityInStock;
 
     @ManyToMany(mappedBy = "sweet")
-    private Set<AcaiToDeliveryEntity> acais = new LinkedHashSet<>();
+    private Set<AcaiEntity> acais = new LinkedHashSet<>();
 
 }

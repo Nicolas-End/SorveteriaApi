@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiToDeliveryEntity;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiEntity;
 import lombok.Data;
 
 @Table(name="TB_ACCOMPANIMENTS")
@@ -23,7 +23,7 @@ public class AccompanimentEntity {
     private int QuantityInStock;
 
     @ManyToMany(mappedBy = "accompaniment")// lado dominado pelo açai
-    private Set<AcaiToDeliveryEntity> acais = new HashSet<>();
+    private Set<AcaiEntity> acais = new HashSet<>();
 
 
 }
