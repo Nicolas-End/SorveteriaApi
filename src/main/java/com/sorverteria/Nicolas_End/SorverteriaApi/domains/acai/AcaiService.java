@@ -34,16 +34,23 @@ public class AcaiService {
     @Transactional
     public ResponseEntity addNewAcai(AcaiDataDTO datas){
 
+        // verifica se algum item é invalido
         List<AccompanimentEntity> accompaniments = accompanimentService.findManyByIds(datas.accompanimentIds());
         List<SweetEntity> sweets = sweetService.findManyById(datas.sweetsIds());
         List<FruitsEntity> fruits =  fruitsService.findManyByIds(datas.fruitsIds());
-
-        // verifica se algum item é invalido
         if(accompaniments.isEmpty() || sweets.isEmpty() || fruits.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Acompanhamentos, frutas ou doces Invalidos");
 
-        AcaiEntity acai = new AcaiEntity();
+        // calcula o valor total do açai
+        double totalPrice = this.calculateTotalPrice(datas);
 
-        // configura o valor inicial do preço
+        // salva o açai no banco de dados
+        AcaiEntity acai = this.createAcai(accompaniments,sweets,fruits,totalPrice,datas.acaiSize());
+        this.acaiRepository.save(acai);
+
+        return ResponseEntity.ok("Pedido da Açai Cadastrado com sucesso");
+    }
+
+    private double calculateTotalPrice(AcaiDataDTO datas){
         double totalPrice;
         if (datas.acaiSize() == AcaiSize.SMALL) totalPrice = 10;
         else if (datas.acaiSize() == AcaiSize.MEDIUM) totalPrice = 12;
@@ -56,16 +63,23 @@ public class AcaiService {
 
         if (datas.sweetsIds().size() > 1) totalPrice += (datas.sweetsIds().size()*3)-3;
 
+        return totalPrice;
+    }
+
+    private AcaiEntity createAcai(List<AccompanimentEntity> accompaniments, List<SweetEntity> sweets, List<FruitsEntity> fruits, double totalPrice, AcaiSize acaiSize){
+        AcaiEntity acai = new AcaiEntity();
+
         accompaniments.forEach(accompaniment -> acai.getAccompaniment().add(accompaniment));
 
         sweets.forEach(sweet -> acai.getSweet().add(sweet));
 
         fruits.forEach(fruit -> acai.getFruits().add(fruit));
 
-        acai.setSize(datas.acaiSize());
+        acai.setSize(acaiSize);
         acai.setPrice(totalPrice);
         acai.setUser(authUser.get());
 
-        return ResponseEntity.ok("Pedido da Açai Cadastrado com sucesso");
+        return acai;
     }
+
 }

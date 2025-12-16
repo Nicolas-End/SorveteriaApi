@@ -32,25 +32,21 @@ public class OrderService {
         this.authUser = authUser;
     }
 
+    @Transactional
     public ResponseEntity registerNewOrder(RequestOrderWithOutIdDTO data){
 
+        // verifica se o picole existe ou se tem estoque
         PopsicleEntity popsicle = popsicleService.verifyPopsicleId(data.popsicleId());
+        if (popsicle == null) return ResponseEntity.notFound().build();
         if (popsicle.getQuantityInStock() == 0 ) return ResponseEntity.status(HttpStatus.CONFLICT).body("produto sem estoque");
         if (data.quantityOrdered() > popsicle.getQuantityInStock()) return ResponseEntity.status(HttpStatus.CONFLICT).body("quantidade insuficiente");
 
+        // atualiza o quantidade em estoque do picole
+        this.updatePopsicleStock(popsicle,data);
 
-        popsicle.setQuantityInStock(popsicle.getQuantityInStock()-data.quantityOrdered());
-        this.popsicleRepository.save(popsicle);
-
-        if (popsicle == null) return ResponseEntity.notFound().build();
-
-        OrderEntity order = new OrderEntity();
-        order.setPopsicle(popsicle);
-        order.setStatus(OrderStatus.PENDENTE);
-        order.setUser(authUser.get());
-        order.setQuantityOrdered(data.quantityOrdered());
-
-        OrderEntity infos = orderRepository.save(order);
+        // salva o novo pedido
+        orderRepository.save(this.createOrder(popsicle,data));
+        
         return ResponseEntity.ok("Pedido Cadastrado com sucesso");
     }
 
@@ -98,5 +94,21 @@ public class OrderService {
         orderRepository.save(order);
 
         return ResponseEntity.ok("Status do pedido modificado com sucesso");
+    }
+
+    private void updatePopsicleStock(PopsicleEntity popsicle, RequestOrderWithOutIdDTO data){
+        popsicle.setQuantityInStock(popsicle.getQuantityInStock()-data.quantityOrdered());
+        this.popsicleRepository.save(popsicle);
+
+    }
+
+    private OrderEntity createOrder(PopsicleEntity popsicle,RequestOrderWithOutIdDTO data){
+        OrderEntity order = new OrderEntity();
+        order.setPopsicle(popsicle);
+        order.setStatus(OrderStatus.PENDENTE);
+        order.setUser(authUser.get());
+        order.setQuantityOrdered(data.quantityOrdered());
+
+        return order;
     }
 }
