@@ -63,7 +63,7 @@ public class FruitsService {
         return ResponseEntity.ok(datas);
     }
 
-    public ResponseEntity getInfoFruitWithouIdAndAcais(UUID id){// n retona o id e nem os açais para entregar
+    public ResponseEntity getInfoFruits(UUID id){// n retona o id e nem os açais para entregar
         FruitsEntity fruit = fruitsRepository.findById(id).orElse(null);
 
         if(fruit == null) return ResponseEntity.notFound().build();
@@ -72,14 +72,6 @@ public class FruitsService {
 
 
         return ResponseEntity.ok(fruitWithoutId);
-    }
-
-    public ResponseEntity getInfoFruit(UUID id){// retorna todas as informações do pedido
-        FruitsEntity fruit = fruitsRepository.findById(id).orElse(null);
-
-        if(fruit == null) return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(fruit);
     }
 
     @Transactional

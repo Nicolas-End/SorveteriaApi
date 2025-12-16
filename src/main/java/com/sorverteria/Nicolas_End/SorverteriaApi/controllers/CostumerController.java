@@ -2,13 +2,9 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.accompaniment.AccompanimentService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
-
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDataDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
@@ -23,17 +19,13 @@ public class CostumerController {
 
     private final PopsicleService popsicleService;
     private final OrderService orderService;
-    private final AccompanimentService accompanimentService;
-    private final FruitsService fruitsService;
-    private final SweetService sweetService;
+
     private final AcaiService acaiService;
 
-    public  CostumerController(PopsicleService popsicleService, OrderService orderService, UserService userService, AccompanimentService accompanimentService, FruitsService fruitsService, SweetService sweetService, AcaiService acaiService){
+    public  CostumerController(PopsicleService popsicleService, OrderService orderService, AcaiService acaiService){
         this.popsicleService = popsicleService;
         this.orderService = orderService;
-        this.accompanimentService = accompanimentService;
-        this.fruitsService = fruitsService;
-        this.sweetService = sweetService;
+
         this.acaiService = acaiService;
     }
 
@@ -42,7 +34,7 @@ public class CostumerController {
         return "Hello to the costumer Page";
     }
 
-    
+
     @GetMapping("/get-popsicle-by-id/{id}")
     public ResponseEntity getPopsicleById(@PathVariable UUID id){
         return this.popsicleService.getPopsicleById(id);
@@ -76,39 +68,9 @@ public class CostumerController {
     }
 
 
-    @GetMapping("/get-all-fruits")
-    public ResponseEntity getAllFruits(){
-        return this.fruitsService.getAllFruits();
-    }
-
-    @GetMapping("/get-fruit/{id}")
-    public ResponseEntity getInfoFruit(@PathVariable UUID id){
-        return this.fruitsService.getInfoFruitWithouIdAndAcais(id);
-    }
-
-    @GetMapping("/get-accompaniment/{id}")
-    public ResponseEntity getInfoAccompaniment(@PathVariable UUID id){
-        return this.accompanimentService.getInfoAccompanimentToCostumer(id);
-    }
-    @GetMapping("/get-all-accompaniment")
-    public ResponseEntity getAllAccompaniment(){
-        return this.accompanimentService.getAllAccompaniment();
-    }
-
-
-    @GetMapping("/get-sweet-info/{id}")
-    public ResponseEntity getSweetInfo(@PathVariable UUID id){
-        return this.sweetService.getSweetInfoToCustomer(id);
-    }
-    @GetMapping("/get-all-sweet")
-    public ResponseEntity getAllSweet(){
-        return this.sweetService.getAllSweets();
-    }
-
-
     @RequestMapping("/açai")
     public class AcaiSession{
-        @PostMapping("/request-new")
+        @PostMapping
         public ResponseEntity requestNewAcai(@RequestBody AcaiDataDTO data){
             return acaiService.addNewAcai(data);
         }

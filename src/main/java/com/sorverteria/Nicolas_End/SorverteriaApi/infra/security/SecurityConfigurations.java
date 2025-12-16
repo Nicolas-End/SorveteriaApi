@@ -3,6 +3,7 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.infra.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,15 +38,24 @@ public class SecurityConfigurations {
                         .requestMatchers("/auth/register").permitAll()
 
                         // Somente ADMIN acessa /admin
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // ADMIN e EMPLOYEER acessam /employeer
-                            .requestMatchers("/employeer").hasAnyRole( "EMPLOYEER","ADMIN")
+                            .requestMatchers("/employeer/**").hasAnyRole( "EMPLOYEER","ADMIN")
 
                         // ADMIN, EMPLOYEER e COSTUMER acessam /costumer
-                        .requestMatchers("/costumer").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")
+                        .requestMatchers("/costumer/**").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")
 
-                        .requestMatchers("/user").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers("/user/**").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+
+                        .requestMatchers(HttpMethod.GET, "/accompaniment/**").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers("/accompaniment/**").hasAnyRole("ADMIN","EMPLOYEER")
+
+                        .requestMatchers(HttpMethod.GET, "/fruit/**").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers("/fruit/**").hasAnyRole("ADMIN","EMPLOYEER")
+
+
+
                         // Qualquer outra requisição precisa de autenticação
                         .anyRequest().authenticated()
                 )
