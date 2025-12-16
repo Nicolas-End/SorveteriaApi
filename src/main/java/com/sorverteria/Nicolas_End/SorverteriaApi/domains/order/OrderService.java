@@ -46,7 +46,7 @@ public class OrderService {
 
         // salva o novo pedido
         orderRepository.save(this.createOrder(popsicle,data));
-        
+
         return ResponseEntity.ok("Pedido Cadastrado com sucesso");
     }
 
