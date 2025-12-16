@@ -4,7 +4,6 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDataDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;

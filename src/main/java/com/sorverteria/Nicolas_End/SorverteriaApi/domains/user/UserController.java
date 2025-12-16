@@ -1,6 +1,5 @@
-package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
+package com.sorverteria.Nicolas_End.SorverteriaApi.domains.user;
 
-import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.user.RequestNewCpfDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
