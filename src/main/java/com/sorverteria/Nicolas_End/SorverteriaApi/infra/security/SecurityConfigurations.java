@@ -54,6 +54,9 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/fruit/**").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
                         .requestMatchers("/fruit/**").hasAnyRole("ADMIN","EMPLOYEER")
 
+                        requestMatchers(HttpMethod.GET, "/sweet/**").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers("/sweet/**").hasAnyRole("ADMIN","EMPLOYEER")
+
 
 
                         // Qualquer outra requisição precisa de autenticação
