@@ -4,8 +4,10 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntit
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleRepository;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserService;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.AllInfoOrdersDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.OrdersDatasDTO;
-import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestNewStatusDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.StatusDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.RequestOrderWithOutIdDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
@@ -23,12 +25,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final PopsicleService popsicleService;
     private final PopsicleRepository popsicleRepository;
+    private final UserService userService;
     private final AuthenticatedUser authUser;
 
-    public OrderService(OrderRepository orderRepository, PopsicleService popsicleService, PopsicleRepository popsicleRepository, AuthenticatedUser authUser){
+    public OrderService(OrderRepository orderRepository, PopsicleService popsicleService, PopsicleRepository popsicleRepository, UserService userService, AuthenticatedUser authUser){
         this.orderRepository = orderRepository;
         this.popsicleService = popsicleService;
         this.popsicleRepository = popsicleRepository;
+        this.userService = userService;
         this.authUser = authUser;
     }
 
@@ -85,16 +89,48 @@ public class OrderService {
         return ResponseEntity.ok("Pedido deletado com sucesso");
     }
 
-    public ResponseEntity updateOrderStatus(UUID id, RequestNewStatusDTO data){
-        OrderEntity order = orderRepository.findByIdAndUser(id,authUser.get());
-            if (order == null) return ResponseEntity.notFound().build();
+    @Transactional
+    public ResponseEntity updateOrderStatus(UUID id, StatusDTO data){
+
+        OrderEntity order = orderRepository.findByIdAndUser_Email(id,data.userEmail());
+        if (order == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não existe");
 
         order.setStatus(data.newStatus());
-
         orderRepository.save(order);
 
-        return ResponseEntity.ok("Status do pedido modificado com sucesso");
+        return ResponseEntity.ok("Pedido atualizado com sucesso");
     }
+
+    public ResponseEntity getSpecificOrder(UUID id){
+        OrderEntity order = orderRepository.findByIdAndUser(id,authUser.get());
+        if (order == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(order);
+    }
+
+    public ResponseEntity getAllOrders(){
+        List<OrderEntity> orders = orderRepository.findAll();
+
+        if(orders.isEmpty()) return ResponseEntity.notFound().build();
+
+        List<AllInfoOrdersDTO> ordersInfos = orders.stream()
+                .map(order -> new AllInfoOrdersDTO(
+                        order.getId(),
+                        order.getStatus(),
+                        order.getPopsicle().getFlavor(),
+                        order.getPopsicle().getPriceByUnit(),
+                        order.getQuantityOrdered(),
+                        order.getUser().getName(),
+                        order.getUser().getEmail()
+
+                )).toList();
+
+        return ResponseEntity.ok(ordersInfos);
+
+
+    }
+
+
 
     private void updatePopsicleStock(PopsicleEntity popsicle, RequestOrderWithOutIdDTO data){
         popsicle.setQuantityInStock(popsicle.getQuantityInStock()-data.quantityOrdered());

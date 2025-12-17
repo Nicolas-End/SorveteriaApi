@@ -15,4 +15,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     OrderEntity findByIdAndUser(UUID id, UserEntity user);
 
+    OrderEntity findByIdAndUser_Email(UUID id, String email);
 }

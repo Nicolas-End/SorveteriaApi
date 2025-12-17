@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.UserRole;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 @Service
@@ -78,5 +79,10 @@ public class UserService {
 
     }
 
+    public UserEntity findUser(String email){
+
+        return userRepository.findById(email).orElse(null);
+
+    }
 
 }
