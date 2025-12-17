@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiEntity;
-import lombok.Data;
+import lombok.*;
 
 @Table(name="TB_ACCOMPANIMENTS")
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccompanimentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

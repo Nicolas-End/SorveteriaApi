@@ -38,26 +38,27 @@ public class SecurityConfigurations {
                         .requestMatchers("/auth/register").permitAll()
 
                         // Somente ADMIN acessa /admin
-                        .requestMatchers("/admin/").hasRole("ADMIN")
+                        .requestMatchers("/admin").hasRole("ADMIN")
 
                         // ADMIN e EMPLOYEER acessam /employeer
-                        .requestMatchers("/employeer/").hasAnyRole( "EMPLOYEER","ADMIN")
+                        .requestMatchers("/employeer").hasAnyRole( "EMPLOYEER","ADMIN")
 
                         // ADMIN, EMPLOYEER e COSTUMER acessam /costumer
-                        .requestMatchers("/costumer/").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")
+                        .requestMatchers("/costumer").hasAnyRole("ADMIN", "EMPLOYEER", "COSTUMER")
 
-                        .requestMatchers("/user/").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers("/user").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
 
-                        .requestMatchers(HttpMethod.GET, "/order/",
-                                "/sweet/",
-                                "/fruit/",
-                                "/accompaniment/").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
+                        .requestMatchers(HttpMethod.GET, "/order",
+                                "/sweet",
+                                "/fruit",
+                                "/accompaniment").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
 
-                        .requestMatchers("/order/",
-                                "/sweet/",
-                                "/fruit/",
-                                "/accompaniment/").hasAnyRole("ADMIN","EMPLOYEER")
+                        .requestMatchers("/order",
+                                "/sweet",
+                                "/fruit",
+                                "/accompaniment").hasAnyRole("ADMIN","EMPLOYEER")
 
+                        .requestMatchers("/acai").hasAnyRole("ADMIN","EMPLOYEER","COSTUMER")
                         // Qualquer outra requisição precisa de autenticação
                         .anyRequest().authenticated()
                 )

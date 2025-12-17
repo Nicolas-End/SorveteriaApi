@@ -6,7 +6,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -15,12 +15,16 @@ import java.util.UUID;
 
 @Entity
 @Table(name="TB_ACAI_TO_DELIVERY")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AcaiEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AcaiSize size;
 

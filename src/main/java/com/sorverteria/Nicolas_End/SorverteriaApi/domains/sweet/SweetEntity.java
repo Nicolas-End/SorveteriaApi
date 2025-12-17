@@ -2,7 +2,7 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet;
 
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,7 +10,10 @@ import java.util.UUID;
 
 @Table(name="TB_SWEET")
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SweetEntity {
 
     @Id

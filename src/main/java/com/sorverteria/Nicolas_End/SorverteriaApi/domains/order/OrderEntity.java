@@ -4,14 +4,17 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.enums.OrderStatus;
 import jakarta.persistence.*;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.user.UserEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle.PopsicleEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 // Essa entitade gerencia os pedidos de sorvetes feito pelos clientes
 @Entity
 @Table(name = "TB_USERS_ORDERS")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderEntity {
 
     @Id

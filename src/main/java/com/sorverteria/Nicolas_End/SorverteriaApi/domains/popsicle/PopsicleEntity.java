@@ -2,14 +2,17 @@ package com.sorverteria.Nicolas_End.SorverteriaApi.domains.popsicle;
 
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="TB_POPSICLE")
 public class PopsicleEntity {
 

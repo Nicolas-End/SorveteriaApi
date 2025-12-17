@@ -7,6 +7,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.fruits.FruitsService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDataDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDatasToCostumerDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 @Service
@@ -50,6 +52,35 @@ public class AcaiService {
         return ResponseEntity.ok("Pedido da Açai Cadastrado com sucesso");
     }
 
+    public ResponseEntity getAllMyAcai(){
+
+        List<AcaiEntity> acais = acaiRepository.findByUser(authUser.get());
+
+        if (acais.isEmpty()) return ResponseEntity.notFound().build();
+
+        List<AcaiDatasToCostumerDTO> acaisDatas = acais.stream()
+                .map(acai -> new AcaiDatasToCostumerDTO(
+                        acai.getPrice(),
+                        acai.getSize(),
+                        acai.getFruits(),
+                        acai.getAccompaniment(),
+                        acai.getSweet()
+                        )
+                ).toList();
+        return  ResponseEntity.ok(acaisDatas);
+
+    }
+
+    public ResponseEntity getMyEspecificAcai(){
+        return ResponseEntity.ok("Teste");
+    }
+
+
+
+
+
+
+
     private double calculateTotalPrice(AcaiDataDTO datas){
         double totalPrice;
         if (datas.acaiSize() == AcaiSize.SMALL) totalPrice = 10;
@@ -67,19 +98,22 @@ public class AcaiService {
     }
 
     private AcaiEntity createAcai(List<AccompanimentEntity> accompaniments, List<SweetEntity> sweets, List<FruitsEntity> fruits, double totalPrice, AcaiSize acaiSize){
-        AcaiEntity acai = new AcaiEntity();
+       try {
 
-        accompaniments.forEach(accompaniment -> acai.getAccompaniment().add(accompaniment));
+           AcaiEntity acai = new AcaiEntity();
 
-        sweets.forEach(sweet -> acai.getSweet().add(sweet));
+           acai.getAccompaniment().addAll(accompaniments);
+           acai.getSweet().addAll(sweets);
+           acai.getFruits().addAll(fruits);
 
-        fruits.forEach(fruit -> acai.getFruits().add(fruit));
+           acai.setSize(acaiSize);
+           acai.setPrice(totalPrice);
+           acai.setUser(authUser.get());
 
-        acai.setSize(acaiSize);
-        acai.setPrice(totalPrice);
-        acai.setUser(authUser.get());
-
-        return acai;
+           return acai;
+       }catch (ConcurrentModificationException exception){
+           throw new ConcurrentModificationException("Erro encontrado função createAcai");
+       }
     }
 
 }
