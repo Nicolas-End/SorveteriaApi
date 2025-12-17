@@ -92,7 +92,7 @@ public class OrderService {
     @Transactional
     public ResponseEntity updateOrderStatus(UUID id, StatusDTO data){
 
-        OrderEntity order = orderRepository.findByIdAndUser_Email(id,data.userEmail());
+        OrderEntity order = orderRepository.findById(id).orElse(null);
         if (order == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não existe");
 
         order.setStatus(data.newStatus());
