@@ -8,6 +8,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetEntity;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDataDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDatasToCostumerDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.FruitSweetAccomp.FSAFormatDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AcaiService {
@@ -62,19 +66,37 @@ public class AcaiService {
                 .map(acai -> new AcaiDatasToCostumerDTO(
                         acai.getPrice(),
                         acai.getSize(),
-                        acai.getFruits(),
-                        acai.getAccompaniment(),
-                        acai.getSweet()
+                        this.reorganizeFruits(acai.getFruits()),// tranforma em uma formato mais legivel para o usuario
+                        this.reorganizeAccompaniment(acai.getAccompaniment()),
+                        this.reorganizeSweets(acai.getSweet())
                         )
                 ).toList();
         return  ResponseEntity.ok(acaisDatas);
 
     }
 
-    public ResponseEntity getMyEspecificAcai(){
-        return ResponseEntity.ok("Teste");
+    public ResponseEntity getMyEspecificAcai(UUID id){
+        AcaiEntity acai = acaiRepository.findById(id).orElse(null);
+
+        if(acai == null) return ResponseEntity.notFound().build();
+
+        AcaiDatasToCostumerDTO acaiToCosutmer = new AcaiDatasToCostumerDTO(acai.getPrice(),acai.getSize(),this.reorganizeFruits(acai.getFruits()),this.reorganizeAccompaniment(acai.getAccompaniment()),this.reorganizeSweets(acai.getSweet()));
+
+        return ResponseEntity.ok(acaiToCosutmer);
+
     }
 
+    public ResponseEntity deleteMyAcaiOrder(UUID id){
+        AcaiEntity acai = acaiRepository.findByIdAndUser(id, authUser.get());
+
+        if (acai == null) return ResponseEntity.notFound().build();
+
+        acaiRepository.delete(acai);
+
+        return ResponseEntity.ok("Pedido deletado com suceso");
+
+
+    }
 
 
 
@@ -114,6 +136,19 @@ public class AcaiService {
        }catch (ConcurrentModificationException exception){
            throw new ConcurrentModificationException("Erro encontrado função createAcai");
        }
+    }
+
+    private Set<FSAFormatDTO> reorganizeFruits(Set<FruitsEntity> fruits){
+        return fruits.stream()
+                .map(fruit -> new FSAFormatDTO(fruit.getId(), fruit.getFruitName())).collect(Collectors.toSet());
+    }
+    private Set<FSAFormatDTO> reorganizeAccompaniment(Set<AccompanimentEntity> accompaniments){
+        return accompaniments.stream()
+                .map(accompaniment -> new FSAFormatDTO(accompaniment.getId(), accompaniment.getName())).collect(Collectors.toSet());
+    }
+    private Set<FSAFormatDTO> reorganizeSweets(Set<SweetEntity> sweets){
+        return sweets.stream()
+                .map(sweet -> new FSAFormatDTO( sweet.getId(), sweet.getName())).collect(Collectors.toSet());
     }
 
 }

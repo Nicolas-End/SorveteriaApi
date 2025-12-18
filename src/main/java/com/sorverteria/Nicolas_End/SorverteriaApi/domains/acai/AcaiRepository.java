@@ -12,4 +12,6 @@ public interface AcaiRepository extends JpaRepository<AcaiEntity, UUID> {
 
     List<AcaiEntity> findByUser(UserEntity user);
 
+    AcaiEntity findByIdAndUser(UUID id, UserEntity user);
+
 }

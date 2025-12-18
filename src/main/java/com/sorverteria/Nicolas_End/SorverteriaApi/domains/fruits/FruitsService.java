@@ -88,4 +88,5 @@ public class FruitsService {
         return fruitsRepository.findAllById(fruitIds);
 
     }
+
 }

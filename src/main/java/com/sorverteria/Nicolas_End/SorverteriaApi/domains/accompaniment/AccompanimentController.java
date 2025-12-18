@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@RestController
 @RequestMapping("/accompaniment")
 public class AccompanimentController {
     private final AccompanimentService accompanimentService;

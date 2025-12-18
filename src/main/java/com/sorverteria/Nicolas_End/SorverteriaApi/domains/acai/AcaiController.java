@@ -23,7 +23,7 @@ public class AcaiController {
 
     @GetMapping("/{id}")
     public ResponseEntity getEspecificAcai(@PathVariable UUID id){
-        return ResponseEntity.ok().build();
+        return acaiService.getMyEspecificAcai(id);
     }
 
     @PostMapping
@@ -32,5 +32,9 @@ public class AcaiController {
     }
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteAcaiOrder(@PathVariable UUID id){
+        return acaiService.deleteMyAcaiOrder(id);
+    }
 }
 
