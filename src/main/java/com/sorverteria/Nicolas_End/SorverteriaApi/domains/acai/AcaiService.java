@@ -9,6 +9,7 @@ import com.sorverteria.Nicolas_End.SorverteriaApi.domains.sweet.SweetService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDataDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.AcaiDatasToCostumerDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.FruitSweetAccomp.FSAFormatDTO;
+import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.acai.FruitSweetAccomp.FSAListDTO;
 import com.sorverteria.Nicolas_End.SorverteriaApi.enums.AcaiSize;
 import com.sorverteria.Nicolas_End.SorverteriaApi.infra.security.AuthenticatedUser;
 import jakarta.transaction.Transactional;
@@ -16,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ConcurrentModificationException;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +27,7 @@ public class AcaiService {
     private final SweetService sweetService;
     private final FruitsService fruitsService;
     private final AuthenticatedUser authUser;
-    public AcaiService(AcaiRepository acaiRepository, AccompanimentService accompanimentService, SweetService sweetService, FruitsService fruitsService, AuthenticatedUser authUser){
+    public AcaiService( AccompanimentService accompanimentService, SweetService sweetService, FruitsService fruitsService, AuthenticatedUser authUser, AcaiRepository acaiRepository){
         this.acaiRepository = acaiRepository;
         this.accompanimentService = accompanimentService;
         this.sweetService = sweetService;
@@ -40,17 +38,16 @@ public class AcaiService {
     @Transactional
     public ResponseEntity addNewAcai(AcaiDataDTO datas){
 
-        // verifica se algum item é invalido
-        List<AccompanimentEntity> accompaniments = accompanimentService.findManyByIds(datas.accompanimentIds());
-        List<SweetEntity> sweets = sweetService.findManyById(datas.sweetsIds());
-        List<FruitsEntity> fruits =  fruitsService.findManyByIds(datas.fruitsIds());
-        if(accompaniments.isEmpty() || sweets.isEmpty() || fruits.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Acompanhamentos, frutas ou doces Invalidos");
+        // verifica se os incrementos do açai são validos caso não retornar null
+        FSAListDTO fsa = this.reorganizeFSA(datas);
+        if (fsa == null) return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Algum dos incrementos no açai é invaldo");
+
 
         // calcula o valor total do açai
         double totalPrice = this.calculateTotalPrice(datas);
 
         // salva o açai no banco de dados
-        AcaiEntity acai = this.createAcai(accompaniments,sweets,fruits,totalPrice,datas.acaiSize());
+        AcaiEntity acai = this.createAcai(fsa.accompaniment(),fsa.sweet(),fsa.fruit(),totalPrice,datas.acaiSize());
         this.acaiRepository.save(acai);
 
         return ResponseEntity.ok("Pedido da Açai Cadastrado com sucesso");
@@ -98,10 +95,37 @@ public class AcaiService {
 
     }
 
+    public ResponseEntity updateAcaiDatas(UUID id, AcaiDataDTO datas){
+        AcaiEntity acai = acaiRepository.findById(id).orElse(null);
+        if(acai == null)return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Açai não encontrado");
+
+
+        FSAListDTO fsa = this.reorganizeFSA(datas);
+        if (fsa == null) return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Algum dos incrementos no açai é invaldo");
+
+        // calcula o valor total do açai
+        double totalPrice = this.calculateTotalPrice(datas);
+
+        AcaiEntity acaiReorganized = this.reorganizeAcaiEntity(acai,fsa.accompaniment(),fsa.sweet(),fsa.fruit(),totalPrice,datas.acaiSize());
+        acaiRepository.save(acaiReorganized);
+        return ResponseEntity.ok("Acai Atualizado");
+
+    }
 
 
 
+    public FSAListDTO reorganizeFSA(AcaiDataDTO datas){
 
+        List<AccompanimentEntity> accompaniments = accompanimentService.findManyByIds(datas.accompanimentIds());
+        List<SweetEntity> sweets = sweetService.findManyById(datas.sweetsIds());
+        List<FruitsEntity> fruits =  fruitsService.findManyByIds(datas.fruitsIds());
+        if(accompaniments.isEmpty() || sweets.isEmpty() || fruits.isEmpty()) return null;
+
+        return new FSAListDTO(accompaniments,fruits,sweets);
+
+    }
+
+    // logicas internas do sistema para calculo de organização do sistema de açai
 
     private double calculateTotalPrice(AcaiDataDTO datas){
         double totalPrice;
@@ -117,6 +141,24 @@ public class AcaiService {
         if (datas.sweetsIds().size() > 1) totalPrice += (datas.sweetsIds().size()*3)-3;
 
         return totalPrice;
+    }
+
+    private AcaiEntity reorganizeAcaiEntity(AcaiEntity acai, List<AccompanimentEntity> accompaniments, List<SweetEntity> sweets, List<FruitsEntity> fruits, double totalPrice, AcaiSize acaiSize){
+        try {
+
+            acai.getAccompaniment().addAll(accompaniments);
+            acai.getSweet().addAll(sweets);
+            acai.getFruits().addAll(fruits);
+
+            acai.setSize(acaiSize);
+            acai.setPrice(totalPrice);
+            acai.setUser(authUser.get());
+
+            return acai;
+            
+        }catch (ConcurrentModificationException exception){
+            throw new ConcurrentModificationException("Erro encontrado função createAcai");
+        }
     }
 
     private AcaiEntity createAcai(List<AccompanimentEntity> accompaniments, List<SweetEntity> sweets, List<FruitsEntity> fruits, double totalPrice, AcaiSize acaiSize){

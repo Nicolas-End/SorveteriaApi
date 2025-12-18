@@ -31,6 +31,10 @@ public class AcaiController {
         return acaiService.addNewAcai(data);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateEspecificAcai(@PathVariable UUID id,@RequestBody AcaiDataDTO datas){
+        return acaiService.updateAcaiDatas(id,datas);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAcaiOrder(@PathVariable UUID id){
