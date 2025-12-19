@@ -1,6 +1,7 @@
 package com.sorverteria.Nicolas_End.SorverteriaApi.controllers;
 
 
+import com.sorverteria.Nicolas_End.SorverteriaApi.domains.acai.AcaiService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.domains.order.OrderService;
 import com.sorverteria.Nicolas_End.SorverteriaApi.dtos.orders.StatusDTO;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,11 @@ import java.util.UUID;
 public class EmployeerController {
 
     private final OrderService orderService;
+    private final AcaiService acaiService;
 
-    public EmployeerController(OrderService orderService){
+    public EmployeerController(OrderService orderService, AcaiService acaiService){
         this.orderService = orderService;
+        this.acaiService = acaiService;
     }
 
     @GetMapping
@@ -34,4 +37,8 @@ public class EmployeerController {
         return orderService.updateOrderStatus(id,data);
     }
 
+    @GetMapping("/acai")
+    public ResponseEntity getAllAcai(){
+        return acaiService.getALl();
+    }
 }
