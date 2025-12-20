@@ -2,7 +2,6 @@
 
 ## SOBRE
 
-
 A Sorveteria API é um projeto de back-end desenvolvido por mim com o objetivo 
 de simular o funcionamento de uma sorveteria fictícia, criada para fins de 
 estudo e prática. A aplicação permite que administradores e funcionários 
