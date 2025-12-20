@@ -1,0 +1,29 @@
+
+networks:
+  private_network:
+    
+
+services:
+  db-service:
+    container_name: database
+    image: postgres
+    # informar a quantidade de memoria que sera compartilhada com esse serviço
+    shm_size: 128mb
+    restart: always
+    ## porta 5432
+    networks:
+      - private_network
+    environment:
+       POSTGRES_PASSWORD : user123
+       POSTGRES_USER: postgres
+       POSTGRES_DB: Sorveteria
+
+  api-service:
+    build: .
+    container_name: sorverteria
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./src/main/resources/.env
+    networks:
+      - private_network
