@@ -5,7 +5,6 @@ networks:
 
 services:
   db-service:
-    container_name: database
     image: postgres
     # informar a quantidade de memoria que sera compartilhada com esse serviço
     shm_size: 128mb
@@ -16,14 +15,21 @@ services:
     environment:
        POSTGRES_PASSWORD : user123
        POSTGRES_USER: postgres
-       POSTGRES_DB: Sorveteria
+       POSTGRES_DB: sorveteria
 
+## roda a aplicação javas
   api-service:
     build: .
     container_name: sorverteria
+    depends_on:
+      - db-service
     ports:
       - "8080:8080"
-    env_file:
-      - ./src/main/resources/.env
+    environment:
+      - URL=jdbc:postgresql://db-service:5432/sorveteria
+      - USERNAME=postgres
+      - PASSWORD=user123
+      - DDL=update
+      - SECRET_TOKEN=ESTA_SENHA_34_ÉCOMPLETAMENTE_3894_SECRETA
     networks:
       - private_network

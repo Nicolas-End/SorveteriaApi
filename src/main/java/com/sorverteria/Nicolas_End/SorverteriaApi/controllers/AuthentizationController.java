@@ -37,4 +37,9 @@ public class AuthentizationController {
         return userService.register(data, UserRole.COSTUMER);
     }
 
+    @PostMapping("/register/admin")
+    public ResponseEntity registerNewAdmin(@RequestBody RegisterDTO data){
+        return userService.register(data, UserRole.ADMIN);
+    }
+
 }
